@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, inline: "sudo yum install -y python-setuptools"
   config.vm.provision :shell, inline: "sudo easy_install pip"
   config.vm.provision :shell, inline: "sudo pip install requests"
+  config.vm.provision :shell, inline: "sudo pip install pyyaml"
   
   # set port forwarding
   # Shows normal web content at 127.0.0.1:4567 on the host
