@@ -11,7 +11,6 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 * `vagrant up`
 * `vagrant ssh`
 * Make note of the local IP that is being used for SSH. This will be the IP used later, and will vary based on local configurations.
-* `cd /vagrant`
 * `screen`
 * `python /vagrant/weather_server.py`
 * ctl-a ctl-d to exit screen session
