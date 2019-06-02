@@ -3,6 +3,12 @@ import time
 import requests
 import yaml
 import json
+from flask import Flask, request
+from flask_restful import Resource, Api
+# from flask_jsonpify import jsonify
+
+app = Flask(__name__)
+api = Api(app)
 
 # Get secrets sorted locally
 with open("secrets.yml") as y:
@@ -58,7 +64,7 @@ def get_weather_from_api():
 # Faux data for entry
 # ts is timestamp in epoch
 ts = int(time.time())
-jake = 56.76
+# jake = 56.76
 
 
 
@@ -69,6 +75,24 @@ read_table_data()
 update_weather_table(ts, float(k_to_f(weather_json['main']['temp'])))
 clean_old_table_data(ts)
 read_table_data()
+
+
+class Weather(Resource):
+    def get(self):
+        conn = sqlite3.connect('weather.db')
+        c = conn.cursor()
+        query_data = c.execute("SELECT * FROM weather")
+        data = c.fetchall()
+        result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]}
+        return result
+        conn.close()
+
+
+
+api.add_resource(Weather, '/weather')
+
+if __name__ == '__main__':
+     app.run(host='localhost', port='5002')
 
 
 #print(weather_json)

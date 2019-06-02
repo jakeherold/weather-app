@@ -4,6 +4,10 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 # How to Use
 * Get your local host machine set up with vagrant, to the point that you can set up a vagrant VM from a vagrantfile
 * Clone this repo to your host machine
+* Get free API key from https://home.openweathermap.org/
+* Create a file called secrets.yml in the root of the repo directory. 
+* Add a line to secrets.yml like this: token: '[token goes here]'
+* Save secrets.yml
 * vagrant up
 * vagrant ssh
 * sudo python /vagrant/weather_server.py
