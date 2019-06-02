@@ -8,6 +8,9 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 * Get it to run on a vagrant server
 * Sort out puppet things
 
+# Limitations
+* API Timeout - No more than 60 per minute w/ my free tier API Token, with 95% uptime SLA
+
 # Extension Ideas
 * Play with in-memory DB, see if that's lighter and appropriate to the task
 * How to lighten this repo

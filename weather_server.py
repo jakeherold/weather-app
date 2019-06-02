@@ -4,48 +4,18 @@ import requests
 import yaml
 import json
 
+# Get secrets sorted locally
 with open("./secrets.yml") as y:
     token_string = yaml.safe_load(y)
 
-
-api_address = "http://api.openweathermap.org/data/2.5/weather?id=4975802&appid={}".format(token_string['token'])
-response = requests.get(api_address)
-weather_json = response.json()
-#print(response.status_code)
-print(weather_json['main']['temp'])
-#print(type(response.text))
-
-# if response.status_code == 200:
-#     print("API up: please continue")
-# else: 
-#     print("ABANDON THREAD! THIS STUFF'S BROKE!")
-
-
-
-
-
-
-
-# Connect to sqlite and create db if it doesn't exist
-conn = sqlite3.connect('weather.db')
-c = conn.cursor()
-
-
-# Faux data for entry
-# ts is timestamp in epoch
-ts = int(time.time())
-temp_k = 256.4
-
-# Create Table
-c.execute("""CREATE TABLE if not exists weather(
-            epoch_time interger,
-            temp_k real
-)""")
+def k_to_f (temp_in_k):
+    f = ((9/5)*(temp_in_k - 273) + 32)
+    return round(f,2) # decimal place standard is based on what I get from the API (2 decimial places)
 
 def update_weather_table(timestamp, temp):
     conn = sqlite3.connect('weather.db')
     c = conn.cursor()
-    c.execute("INSERT INTO weather VALUES (:epoch_time, :temp_k)",{'epoch_time': ts, 'temp_k':temp_k,} )
+    c.execute("INSERT INTO weather VALUES (:epoch_time, :temp_f)",{'epoch_time': timestamp, 'temp_f':temp,} )
     conn.commit()
     conn.close()
 
@@ -58,8 +28,6 @@ def read_table_data ():
     print(c.fetchall())
     conn.close()
 
-
-
 # Delete Old rows (for updates to data, so we don't let the DB grow too big)
 def clean_old_table_data(timestamp):
     conn = sqlite3.connect('weather.db')
@@ -68,9 +36,41 @@ def clean_old_table_data(timestamp):
     conn.commit()
     conn.close()
 
+def database_check_or_create():
+    # Connect to sqlite and create db if it doesn't exist
+    conn = sqlite3.connect('weather.db')
+    c = conn.cursor()
+    c.execute("""CREATE TABLE if not exists weather(
+            epoch_time interger,
+            temp_f real
+    )""")
+    conn.close()
+
+def get_weather_from_api():
+    api_address = "http://api.openweathermap.org/data/2.5/weather?id=4975802&appid={}".format(token_string['token'])
+    response = requests.get(api_address)
+    return dict(response.json())
+    
+    
 
 
-# read_table_data()
-# update_weather_table(ts, temp_k)
-# clean_old_table_data(ts)
-# read_table_data()
+
+# Faux data for entry
+# ts is timestamp in epoch
+ts = int(time.time())
+jake = 56.76
+
+
+
+
+database_check_or_create()
+weather_json = get_weather_from_api()
+read_table_data()
+update_weather_table(ts, float(k_to_f(weather_json['main']['temp'])))
+clean_old_table_data(ts)
+read_table_data()
+
+
+#print(weather_json)
+#print("Portland Weather in Kelvin: " + str(weather_json['main']['temp']))
+#print("Portland Weather in Fahrenheit: " + str(k_to_f(weather_json['main']['temp'])))
