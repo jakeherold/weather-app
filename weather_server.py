@@ -5,7 +5,7 @@ import yaml
 import json
 
 # Get secrets sorted locally
-with open("./secrets.yml") as y:
+with open("secrets.yml") as y:
     token_string = yaml.safe_load(y)
 
 def k_to_f (temp_in_k):

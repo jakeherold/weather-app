@@ -1,6 +1,12 @@
 # weather-app
 A mini-weather API using Vagrant, Python, SQLite, and Puppet
 
+# How to Use
+* Get your local host machine set up with vagrant, to the point that you can set up a vagrant VM from a vagrantfile
+* Clone this repo to your host machine
+* vagrant up
+* vagrant ssh
+* sudo python /vagrant/weather_server.py
 
 # To-Do List
 * ~~Get basic DB functionality up~~
