@@ -8,7 +8,6 @@ c = conn.cursor()
 
 # Faux data for entry
 # ts is timestamp in epoch
-# We're declaring it as 
 ts = int(time.time())
 temp_k = 256.4
 
@@ -18,25 +17,35 @@ c.execute("""CREATE TABLE if not exists weather(
             temp_k real
 )""")
 
+def update_weather_table(timestamp, temp):
+    conn = sqlite3.connect('weather.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO weather VALUES (:epoch_time, :temp_k)",{'epoch_time': ts, 'temp_k':temp_k,} )
+    conn.commit()
+    conn.close()
 
-# Write data to table
-c.execute("INSERT INTO weather VALUES (:epoch_time, :temp_k)",{'epoch_time': ts, 'temp_k':temp_k,} )
-conn.commit()
 
-# Read Data from table
-c.execute("SELECT * FROM weather")
-print(c.fetchall())
+def read_table_data ():
+    # Read Data from table
+    conn = sqlite3.connect('weather.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM weather")
+    print(c.fetchall())
+    conn.close()
 
-# Trying to figure out how to tell if table exists. Trying in create method for now.
-# c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='{weather}';")
-# print(c.fetchall())
+
 
 # Delete Old rows (for updates to data, so we don't let the DB grow too big)
+def clean_old_table_data(timestamp):
+    conn = sqlite3.connect('weather.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM weather WHERE epoch_time < ?", (timestamp,))
+    conn.commit()
+    conn.close()
 
-c.execute("DELETE FROM weather WHERE epoch_time < ?", (ts,))
-conn.commit()
 
-c.execute("SELECT * FROM weather")
-print(c.fetchall())
 
-conn.close()
+read_table_data()
+update_weather_table(ts, temp_k)
+clean_old_table_data(ts)
+read_table_data()
