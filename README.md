@@ -12,3 +12,6 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 * Play with in-memory DB, see if that's lighter and appropriate to the task
 * How to lighten this repo
 
+# Various notes and thoughts
+* Vagrant is a really sweet tool. Regardless of how this project turns out I'm going to have to remember this one.
+* Validated that the newest "build" of the wather_server.py script works on a fresh vagrant install (9:59am PST)
