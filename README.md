@@ -29,6 +29,7 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 
 # Limitations
 * API Timeout - No more than 60 per minute w/ my free tier API Token, with 95% uptime SLA
+* To start the API you *must* be in either the /vagrant/ or /home/vagrant directory on your VM. If you are not, it will throw the following error: `sqlite3.OperationalError: unable to open database file`
 
 # Extension Ideas
 * Play with in-memory DB, see if that's lighter and appropriate to the task
