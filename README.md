@@ -15,9 +15,9 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 # To-Do List
 * ~~Get basic DB functionality up~~
 * ~~Get basic API call functionality up~~
-* Get it to run on a vagrant server (been testing after various stages, but now need to finish validating that it still runs)
-* Get REST API up and running. 
-* True-up REST API function to Vagrant box
+* ~~Get it to run on a vagrant server~~
+* ~~Get REST API up and running.~~
+* True-up REST API function to Vagrant box (confirmed it works locally, now have to figure out settings for getting it to be queriable from the host machine)
 * Sort out puppet things
 
 # Limitations
