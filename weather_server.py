@@ -5,7 +5,6 @@ import yaml
 import json
 from flask import Flask, request
 from flask_restful import Resource, Api
-# from flask_jsonpify import jsonify
 
 app = Flask(__name__)
 api = Api(app)
@@ -83,7 +82,7 @@ class Weather(Resource):
         c = conn.cursor()
         query_data = c.execute("SELECT * FROM weather")
         data = c.fetchall()
-        result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]}
+        result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]} # Note: I know there are good json-ifying libraries out there, but of the few i tried there were issues getting all of them set up wtih the normal pip install commands. So, I figured this was a faster, dirtier, more POC-esque way of getting around the issue.
         return result
         conn.close()
 
