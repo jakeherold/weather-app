@@ -55,25 +55,6 @@ def get_weather_from_api():
     api_address = "http://api.openweathermap.org/data/2.5/weather?id=4975802&appid={}".format(token_string['token'])
     response = requests.get(api_address)
     return dict(response.json())
-    
-    
-
-
-
-# Faux data for entry
-# ts is timestamp in epoch
-ts = int(time.time())
-# jake = 56.76
-
-
-
-
-database_check_or_create()
-weather_json = get_weather_from_api()
-read_table_data()
-update_weather_table(ts, float(k_to_f(weather_json['main']['temp'])))
-clean_old_table_data(ts)
-read_table_data()
 
 
 class Weather(Resource):
@@ -82,9 +63,31 @@ class Weather(Resource):
         c = conn.cursor()
         query_data = c.execute("SELECT * FROM weather")
         data = c.fetchall()
-        result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]} # Note: I know there are good json-ifying libraries out there, but of the few i tried there were issues getting all of them set up wtih the normal pip install commands. So, I figured this was a faster, dirtier, more POC-esque way of getting around the issue.
+        if (int(time.time()) - data[0][0]) < 600: # rounding time, as the source data API runs on 10-minute intervals. Milliseconds and fractions thereof aren't worth the complexity.
+            result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]} # Note: I know there are good json-ifying libraries out there, but of the few i tried there were issues getting all of them set up wtih the normal pip install commands. So, I figured this was a faster, dirtier, more POC-esque way of getting around the issue.
+        else:
+            temp_ts = int(time.time())
+            weather_json = get_weather_from_api()
+            update_weather_table(temp_ts, float(k_to_f(weather_json['main']['temp'])))
+            clean_old_table_data(temp_ts)
+            result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]}
         return result
         conn.close()
+
+
+# Faux data for entry
+# ts is timestamp in epoch
+ts = int(time.time())
+
+database_check_or_create()
+# weather_json = get_weather_from_api()
+# read_table_data()
+# update_weather_table(ts, float(k_to_f(weather_json['main']['temp'])))
+# clean_old_table_data(ts)
+# read_table_data()
+
+
+
 
 
 
@@ -93,7 +96,3 @@ api.add_resource(Weather, '/weather')
 if __name__ == '__main__':
      app.run(host='localhost', port='5002')
 
-
-#print(weather_json)
-#print("Portland Weather in Kelvin: " + str(weather_json['main']['temp']))
-#print("Portland Weather in Fahrenheit: " + str(k_to_f(weather_json['main']['temp'])))
