@@ -1,0 +1,12 @@
+# Editor swapfiles
+.*.sw?
+*~
+
+# Vagrant stuff
+boxes/*
+/.vagrant
+
+
+# Python
+*.pyc
+
