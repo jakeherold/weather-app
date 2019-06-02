@@ -11,8 +11,8 @@ from flask_restful import Resource, Api
 app = Flask(__name__)
 api = Api(app)
 
-# Get secrets sorted locally
-with open("secrets.yml") as y:
+# Get secrets set locally
+with open("/vagrant/secrets.yml") as y:
     token_string = yaml.safe_load(y)
 
 # Figure out host IP to determine what IP to server from
@@ -20,7 +20,7 @@ guest_ip = subprocess.check_output(["hostname", "-I"]).strip()
 
 
 def k_to_f (temp_in_k):
-    f = ((9/5)*(temp_in_k - 273) + 32)
+    f = (temp_in_k - 273.15) * 9/5 + 32
     return round(f,2) # decimal place standard is based on what I get from the API (2 decimial places)
 
 def update_weather_table(timestamp, temp):
@@ -81,9 +81,20 @@ class Weather(Resource):
         conn.close()
 
 
+############################
+#  Initialization Section  #
+############################
+"""
+When this python script runs it will automatically create the database file if it doesn't exist, 
+and update the table immediately. The logic here is that we want there to be data for the logic
+above to check against, and this will cache some weather data. 
+"""
+
 # ts is timestamp in epoch
 ts = int(time.time())
 database_check_or_create()
+weather_json = get_weather_from_api()
+update_weather_table(ts, float(k_to_f(weather_json['main']['temp'])))
 
 api.add_resource(Weather, '/weather')
 
