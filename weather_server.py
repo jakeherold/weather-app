@@ -69,7 +69,7 @@ class Weather(Resource):
         c = conn.cursor()
         query_data = c.execute("SELECT * FROM weather")
         data = c.fetchall()
-        if (int(time.time()) - data[0][0]) < 15: # rounding time, as the source data API runs on 10-minute intervals. Milliseconds and fractions thereof aren't worth the complexity.
+        if (int(time.time()) - data[0][0]) < 600: # rounding time, as the source data API runs on 10-minute intervals. Milliseconds and fractions thereof aren't worth the complexity.
             result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]} # Note: I know there are good json-ifying libraries out there, but of the few i tried there were issues getting all of them set up wtih the normal pip install commands. So, I figured this was a faster, dirtier, more POC-esque way of getting around the issue.
         else:
             temp_ts = int(time.time())

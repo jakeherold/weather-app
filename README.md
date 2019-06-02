@@ -24,8 +24,8 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 * ~~Get it to run on a vagrant server~~
 * ~~Get REST API up and running.~~
 * ~~True-up REST API function to Vagrant box (confirmed it works locally, now have to figure out settings for getting it to be queriable from the host machine)~~
-* debug oddball behavior where a second request is made, even if 10 minutes haven't passed. 
-* Sort out puppet things
+* ~~debug oddball behavior where a second request is made, even if 10 minutes haven't passed.~~
+* Sort out puppet things  - service-ify the script, and start on startup.
 
 # Limitations
 * API Timeout - No more than 60 per minute w/ my free tier API Token, with 95% uptime SLA
