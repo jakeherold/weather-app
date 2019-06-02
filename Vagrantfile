@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   
   # set port forwarding
   # Shows normal web content at 127.0.0.1:4567 on the host
-  config.vm.network :forwarded_port, guest: 80, host: 4567
+  config.vm.network :forwarded_port, guest: 5002, host: 4567
   
   # Declare puppet locations
   config.vm.provision "puppet" do |puppet|

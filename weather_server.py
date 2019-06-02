@@ -3,15 +3,21 @@ import time
 import requests
 import yaml
 import json
+import subprocess
 from flask import Flask, request
 from flask_restful import Resource, Api
 
+# Basic setup for Flask
 app = Flask(__name__)
 api = Api(app)
 
 # Get secrets sorted locally
 with open("secrets.yml") as y:
     token_string = yaml.safe_load(y)
+
+# Figure out host IP to determine what IP to server from
+guest_ip = subprocess.check_output(["hostname", "-I"]).strip()
+
 
 def k_to_f (temp_in_k):
     f = ((9/5)*(temp_in_k - 273) + 32)
@@ -94,5 +100,5 @@ database_check_or_create()
 api.add_resource(Weather, '/weather')
 
 if __name__ == '__main__':
-     app.run(host='localhost', port='5002')
+     app.run(host=guest_ip , port='5002')
 
