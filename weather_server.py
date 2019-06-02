@@ -70,13 +70,13 @@ class Weather(Resource):
         query_data = c.execute("SELECT * FROM weather")
         data = c.fetchall()
         if (int(time.time()) - data[0][0]) < 600: # rounding time, as the source data API runs on 10-minute intervals. Milliseconds and fractions thereof aren't worth the complexity.
-            result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]} # Note: I know there are good json-ifying libraries out there, but of the few i tried there were issues getting all of them set up wtih the normal pip install commands. So, I figured this was a faster, dirtier, more POC-esque way of getting around the issue.
+            result = {'query_time': data[0][0], 'temperature':data[0][1]} # Note: I know there are good json-ifying libraries out there, but of the few i tried there were issues getting all of them set up wtih the normal pip install commands. So, I figured this was a faster, dirtier, more POC-esque way of getting around the issue.
         else:
             temp_ts = int(time.time())
             weather_json = get_weather_from_api()
             update_weather_table(temp_ts, float(k_to_f(weather_json['main']['temp'])))
             clean_old_table_data(temp_ts)
-            result = {'weather_data_last_update': data[0][0], 'temp_in_f':data[0][1]}
+            result = {'query_time': data[0][0], 'temperature':data[0][1]}
         return result
         conn.close()
 
@@ -96,7 +96,7 @@ database_check_or_create()
 weather_json = get_weather_from_api()
 update_weather_table(ts, float(k_to_f(weather_json['main']['temp'])))
 
-api.add_resource(Weather, '/weather')
+api.add_resource(Weather, '/temperature')
 
 if __name__ == '__main__':
      app.run(host=guest_ip , port='5002')

@@ -15,7 +15,7 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 * `python /vagrant/weather_server.py`
 * ctl-a ctl-d to exit screen session
 * `hostname -I`
-* use IP from previous command to run: `curl http://[IP]:5002/weather`
+* use IP from previous command to run: `curl http://[IP]:5002/temperature`
 * Profit!
 
 # To-Do List
@@ -25,7 +25,7 @@ A mini-weather API using Vagrant, Python, SQLite, and Puppet
 * ~~Get REST API up and running.~~
 * ~~True-up REST API function to Vagrant box (confirmed it works locally, now have to figure out settings for getting it to be queriable from the host machine)~~
 * ~~debug oddball behavior where a second request is made, even if 10 minutes haven't passed.~~
-* Sort out puppet things  - service-ify the script, and start on startup.
+* ~~Sort out Puppet things~~ FWIW, i'm using a _very_ limited amount of puppet provisioning, but it does exist within the vagrant file, for what that's worth. 
 
 # Limitations
 * API Timeout - No more than 60 per minute w/ my free tier API Token, with 95% uptime SLA
