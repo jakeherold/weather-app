@@ -1,5 +1,30 @@
 import sqlite3
 import time
+import requests
+import yaml
+import json
+
+with open("./secrets.yml") as y:
+    token_string = yaml.safe_load(y)
+
+
+api_address = "http://api.openweathermap.org/data/2.5/weather?id=4975802&appid={}".format(token_string['token'])
+response = requests.get(api_address)
+weather_json = response.json()
+#print(response.status_code)
+print(weather_json['main']['temp'])
+#print(type(response.text))
+
+# if response.status_code == 200:
+#     print("API up: please continue")
+# else: 
+#     print("ABANDON THREAD! THIS STUFF'S BROKE!")
+
+
+
+
+
+
 
 # Connect to sqlite and create db if it doesn't exist
 conn = sqlite3.connect('weather.db')
@@ -45,7 +70,7 @@ def clean_old_table_data(timestamp):
 
 
 
-read_table_data()
-update_weather_table(ts, temp_k)
-clean_old_table_data(ts)
-read_table_data()
+# read_table_data()
+# update_weather_table(ts, temp_k)
+# clean_old_table_data(ts)
+# read_table_data()

@@ -12,3 +12,6 @@ boxes/*
 
 # Database File
 weather.db
+
+# Secret Stuff
+secrets.yml
